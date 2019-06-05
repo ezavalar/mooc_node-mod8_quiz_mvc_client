@@ -15,7 +15,7 @@ const initial_quizzes = JSON.stringify([
 
 localStorage.quizzes = localStorage.quizzes || initial_quizzes;
 
-    // VIEWs
+    // VIEWS
 
 const index = (quizzes) => quizzes.reduce((ac, quiz, id) => 
     ac +=`<div><span class="play"   quizid="${id}">${quiz.question}</span>
@@ -84,19 +84,46 @@ const updateController = (id) => {
 };
 
 const newController = () => {
-    // ..... introducir código
+    // Implementado por Ericka Zavala
+    $('#main').html(quizForm('Create Quiz', 'create', 0, '', ''));
 };
 
 const createController = () => {
-    // ..... introducir código
+    // Implementado por Ericka Zavala
+    let quizzes=JSON.parse(localStorage.quizzes);
+    let nquizzes= quizzes.length;
+    let question = $('#question').val();
+    let answer = $('#answer').val();
+
+    quizzes.push({
+        question: (question || "").trim(),
+        answer: (answer || "").trim()
+    });
+    localStorage.quizzes = JSON.stringify(quizzes);
+    indexController();
 };
 
 const deleteController = (id) => {
-    // ..... introducir código
+    // Implementado por Ericka Zavala
+    let quizzes=JSON.parse(localStorage.quizzes);
+    quizzes.splice(id,1);
+    localStorage.quizzes = JSON.stringify(quizzes);
+    indexController();
 };
 
 const resetController = (id) => {
-    // ..... introducir código
+    // Implementado por Ericka Zavala
+    let quizzes=JSON.parse(localStorage.quizzes);
+    let nquizzes= quizzes.length;
+    quizzes=[];
+    quizzes=[ 
+        { question: "Capital of Italy",    answer: "Rome" },
+        { question: "Capital of France",   answer: "Paris" },
+        { question: "Capital of Spain",    answer: "Madrid" },
+        { question: "Capital of Portugal", answer: "Lisbon" }
+    ];
+    localStorage.quizzes = JSON.stringify(quizzes);
+    indexController();
 };
 
 
@@ -110,6 +137,10 @@ const eventsController = ()=> {
   $(document).on('click','.update', (e)=> updateController(Number($(e.target).attr("quizid"))));
 
     // ..... añadir manejadores de eventos new, create, delete y reset
+  $(document).on('click', '.new',()=> newController());
+  $(document).on('click', '.create',()=> createController());
+  $(document).on('click', '.delete',(e)=> deleteController(Number($(e.target).attr("quizid"))));
+  $(document).on('click', '.reset',(e)=> resetController(Number($(e.target).attr("quizid"))));
 }
 
 
